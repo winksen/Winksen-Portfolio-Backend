@@ -10,18 +10,18 @@ class GalleryController extends Controller
 {
     public function index()
     {
-        $galleries = Gallery::paginate(8);;
+        $galleries = Gallery::with('images')->paginate(8);
         return response()->json($galleries);
     }
     public function show($id)
     {
-        $gallery = Gallery::find($id);
+        $gallery = Gallery::with('images')->find($id);
 
         if (!$gallery) {
             return response()->json(['error' => 'Gallery not found'], 404);
         }
 
-        return response()->json(['gallery' => $gallery]);
+        return response()->json($gallery);
     }
 
     public function store(Request $request)

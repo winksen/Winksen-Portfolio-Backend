@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class Gallery extends Model
+class Image extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -17,24 +17,27 @@ class Gallery extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'gallery_id',
         'imageUrl',
         'title',
-        'link',
-        'description',
-        'isNew',
-        'isHot',
-        'tag1',
-        'tag2',
-        'tag3',
-        'tag4',
-        'tag5',
-        'tag6',
-        'tag7',
-        'tag8',
+        'alt',
+        'gallery',
+        'date',
+        'dimensions',
+        'imageType',
+        'fileName',
+        'camera',
+        'lens',
+        'cameraType',
+        'focalLength',
+        'shutterSpeed',
+        'aperture',
+        'iso',
+        'software',
     ];
 
-    public function images()
+    public function gallery()
     {
-        return $this->hasMany(Image::class);
+        return $this->belongsTo(Gallery::class);
     }
 }
