@@ -10,7 +10,7 @@ class GalleryController extends Controller
 {
     public function index()
     {
-        $galleries = Gallery::paginate(10);;
+        $galleries = Gallery::paginate(8);;
         return response()->json($galleries);
     }
     public function show($id)
