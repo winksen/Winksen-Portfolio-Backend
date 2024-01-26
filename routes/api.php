@@ -22,3 +22,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::apiResource('galleries', GalleryController::class);
 Route::get('/galleries/{galleryId}/images', [ImageController::class, 'index']);
+Route::get('/galleries/{galleryId}/images/{imageId}', [ImageController::class, 'show']);
