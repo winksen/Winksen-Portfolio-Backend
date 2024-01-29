@@ -30,6 +30,18 @@ return new class extends Migration
             $table->boolean('tag6')->default(0);
             $table->boolean('tag7')->default(0);
             $table->boolean('tag8')->default(0);
+            $table->boolean('tag9')->default(0);
+            $table->boolean('tag10')->default(0);
+            $table->boolean('tag11')->default(0);
+            $table->boolean('tag12')->default(0);
+            $table->boolean('tag13')->default(0);
+            $table->boolean('tag14')->default(0);
+            $table->boolean('tag15')->default(0);
+            $table->boolean('tag16')->default(0);
+            $table->boolean('tag17')->default(0);
+            $table->boolean('tag18')->default(0);
+            $table->boolean('tag19')->default(0);
+            $table->boolean('tag20')->default(0);
         });
     }
 
