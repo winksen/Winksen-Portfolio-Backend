@@ -14,7 +14,7 @@ class ImagesTableSeeder extends Seeder
 
         foreach (range(1, 20) as $index) {
             DB::table('images')->insert([
-                'gallery_id' => '21',
+                'gallery_id' => '1',
                 'imageUrl' => '/images/Malaysia.jpg',
                 'title' => 'Malaysia 2023',
                 'alt' => '/portfolio/gallery/malaysia-2023',
