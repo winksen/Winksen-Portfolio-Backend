@@ -13,6 +13,7 @@ class GalleryController extends Controller
         $galleries = Gallery::with('images')->paginate(4);
         return response()->json($galleries);
     }
+
     public function show($id)
     {
         $gallery = Gallery::with('images')->find($id);
@@ -71,5 +72,15 @@ class GalleryController extends Controller
         $gallery->delete();
 
         return response()->json(['message' => 'Gallery deleted successfully']);
+    }
+
+    public function filterByTag($tagId)
+    {
+        $columnName = "tag" . $tagId;
+
+        $galleries = Gallery::where($columnName, true)
+            ->paginate(4);
+
+        return response()->json($galleries);
     }
 }
