@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\GalleryController;
 use App\Http\Controllers\Api\ImageController;
+use App\Http\Controllers\Api\BlogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,3 +25,5 @@ Route::apiResource('galleries', GalleryController::class);
 Route::get('/galleries/tag/{tagId}', [GalleryController::class, 'filterByTag']);
 Route::get('/galleries/{galleryId}/images', [ImageController::class, 'index']);
 Route::get('/galleries/{galleryId}/images/{imageId}', [ImageController::class, 'show']);
+
+Route::apiResource('blogs', BlogController::class);
