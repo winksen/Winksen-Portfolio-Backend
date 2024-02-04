@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\GalleryController;
 use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\BlogController;
+use App\Http\Controllers\Api\ChangeLogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,3 +28,4 @@ Route::get('/galleries/{galleryId}/images', [ImageController::class, 'index']);
 Route::get('/galleries/{galleryId}/images/{imageId}', [ImageController::class, 'show']);
 
 Route::apiResource('blogs', BlogController::class);
+Route::apiResource('changelogs', ChangeLogController::class);
