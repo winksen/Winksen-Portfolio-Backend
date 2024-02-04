@@ -15,7 +15,7 @@ class ChangeLogController extends Controller
         $formattedChangeLogs = $changeLogs->map(function ($log) {
             return [
                 'id' => $log->id,
-                'type' => 'newPage',
+                'type' => $log->type,
                 'details' => [
                     'name' => $log->name,
                     'href' => $log->href,
@@ -26,7 +26,7 @@ class ChangeLogController extends Controller
             ];
         });
 
-        return response()->json(['change_logs' => $formattedChangeLogs]);
+        return response()->json($formattedChangeLogs);
     }
 
     public function show($id)
