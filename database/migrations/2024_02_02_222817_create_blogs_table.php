@@ -14,6 +14,19 @@ return new class extends Migration
         Schema::create('blogs', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->string('imageUrl')->nullable();
+            $table->string('title')->nullable();
+            $table->string('author')->nullable();
+            $table->string('link')->nullable();
+            $table->string('readTime')->nullable();
+            $table->string('publishDate')->nullable();
+            $table->string('revisions')->nullable();
+            $table->string('likeCount')->nullable();
+            $table->string('commentCount')->nullable();
+            $table->boolean('isNew')->default(0);
+            $table->boolean('isHot')->default(0);
+            $table->boolean('isFeatured')->default(0);
+            $table->longText('description')->nullable();
         });
     }
 
