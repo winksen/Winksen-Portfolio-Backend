@@ -20,9 +20,9 @@ return new class extends Migration
             $table->string('link')->nullable();
             $table->string('readTime')->nullable();
             $table->string('publishDate')->nullable();
-            $table->string('revisions')->nullable();
-            $table->string('likeCount')->nullable();
-            $table->string('commentCount')->nullable();
+            $table->int('revisions')->nullable();
+            $table->int('likeCount')->nullable();
+            $table->int('commentCount')->nullable();
             $table->boolean('isNew')->default(0);
             $table->boolean('isHot')->default(0);
             $table->boolean('isFeatured')->default(0);

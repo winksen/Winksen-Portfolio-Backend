@@ -14,6 +14,11 @@ return new class extends Migration
         Schema::create('contents', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->unsignedBigInteger('blog_id');
+            $table->string('type'); // e.g., paragraph, quote, table, list, image
+            $table->json('content');
+
+            $table->foreign('blog_id')->references('id')->on('blogs')->onDelete('cascade');
         });
     }
 
