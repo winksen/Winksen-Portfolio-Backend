@@ -12,6 +12,10 @@ class ChangeLogController extends Controller
     {
         $changeLogs = ChangeLog::all();
 
+        if ($changeLogs->isEmpty()) {
+            return response()->json(['message' => 'No data found.']);
+        }
+
         $formattedChangeLogs = $changeLogs->map(function ($log) {
             return [
                 'id' => $log->id,

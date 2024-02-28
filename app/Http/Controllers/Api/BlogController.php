@@ -10,8 +10,22 @@ class BlogController extends Controller
 {
     public function index()
     {
+        // return response()->json(['error' => 'Gallery not found'], 404);
+        // return response()->json([]);
         $blogs = Blog::paginate(4);
         return response()->json($blogs);
+    }
+
+    public function showFeatured()
+    {
+        return response()->json(['message' => 'No data found.'], 404);
+        $blog = Blog::find($id);
+
+        if (!$blog) {
+            return response()->json(['error' => 'Blog not found'], 404);
+        }
+
+        return response()->json($blog);
     }
 
     public function show($id)

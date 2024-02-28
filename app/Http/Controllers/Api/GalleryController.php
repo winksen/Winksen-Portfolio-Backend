@@ -10,6 +10,7 @@ class GalleryController extends Controller
 {
     public function index()
     {
+        // return response()->json(['message' => 'No data found.']);
         $galleries = Gallery::with('images')->paginate(4);
         return response()->json($galleries);
     }
