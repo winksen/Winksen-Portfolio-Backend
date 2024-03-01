@@ -13,7 +13,7 @@ class ChangeLogController extends Controller
         $changeLogs = ChangeLog::all();
 
         if ($changeLogs->isEmpty()) {
-            return response()->json(['message' => 'No data found.']);
+            return response()->json(['message' => 'No data found.'], 404);
         }
 
         $formattedChangeLogs = $changeLogs->map(function ($log) {
@@ -105,13 +105,35 @@ class ChangeLogController extends Controller
         return response()->json(['message' => 'ChangeLog deleted successfully']);
     }
 
-    public function filterByTag($tagId)
+    public function filterByType($typeName)
     {
-        $columnName = "tag" . $tagId;
+        $validTypeNames = ['newPage', 'newBugFix', 'pageImprovement'];
 
-        $changelogs = ChangeLog::where($columnName, true)
-            ->paginate(4);
+        if (!in_array($typeName, $validTypeNames)) {
+            return response()->json(['error' => 'Invalid type name'], 404);
+        }
 
-        return response()->json($changelogs);
+        $changeLogs = ChangeLog::where("type", $typeName)->get();
+
+        if ($changeLogs->isEmpty()) {
+            return response()->json(['error' => 'No ChangeLogs found for the specified type'], 404);
+        }
+
+        $formattedChangeLogs = $changeLogs->map(function ($log) {
+            return [
+                'id' => $log->id,
+                'type' => $log->type,
+                'details' => [
+                    'name' => $log->name,
+                    'href' => $log->href,
+                    'version' => $log->version,
+                ],
+                'comment' => $log->comment,
+                'date' => $log->created_at->diffForHumans(),
+            ];
+        });
+
+        return response()->json($formattedChangeLogs);
     }
+
 }

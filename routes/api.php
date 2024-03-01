@@ -30,4 +30,5 @@ Route::get('/galleries/{galleryId}/images/{imageId}', [ImageController::class, '
 Route::get('blogs/featured', [BlogController::class, 'showFeatured']);
 Route::apiResource('blogs', BlogController::class);
 
+Route::get('changelogs/{typeName}', [ChangeLogController::class, 'filterByType']);
 Route::apiResource('changelogs', ChangeLogController::class);
