@@ -10,7 +10,7 @@ class ChangeLogController extends Controller
 {
     public function index()
     {
-        $changeLogs = ChangeLog::all();
+        $changeLogs = ChangeLog::orderBy('created_at', 'desc')->get();
 
         if ($changeLogs->isEmpty()) {
             return response()->json(['message' => 'No data found.'], 404);
@@ -26,7 +26,7 @@ class ChangeLogController extends Controller
                     'version' => $log->version,
                 ],
                 'comment' => $log->comment,
-                'date' => $log->created_at->diffForHumans(),
+                'date' => $log->created_at->from(),
             ];
         });
 
@@ -113,7 +113,7 @@ class ChangeLogController extends Controller
             return response()->json(['error' => 'Invalid type name'], 404);
         }
 
-        $changeLogs = ChangeLog::where("type", $typeName)->get();
+        $changeLogs = ChangeLog::where("type", $typeName)->orderBy('created_at', 'desc')->get();
 
         if ($changeLogs->isEmpty()) {
             return response()->json(['error' => 'No ChangeLogs found for the specified type'], 404);
@@ -129,7 +129,7 @@ class ChangeLogController extends Controller
                     'version' => $log->version,
                 ],
                 'comment' => $log->comment,
-                'date' => $log->created_at->diffForHumans(),
+                'date' => $log->created_at->from(),
             ];
         });
 
