@@ -10,16 +10,22 @@ class BlogController extends Controller
 {
     public function index()
     {
-        // return response()->json(['error' => 'Gallery not found'], 404);
-        // return response()->json([]);
-        $blogs = Blog::paginate(4);
+        // Get the ID of the last featured blog
+        $lastFeaturedBlogId = Blog::where('isFeatured', true)
+            ->orderBy('created_at', 'desc')
+            ->value('id');
+
+        // Get all blogs except the last featured one
+        $blogs = Blog::where('id', '!=', $lastFeaturedBlogId)
+            ->paginate(4);
+
         return response()->json($blogs);
     }
 
     public function showFeatured()
     {
-        return response()->json(['message' => 'No data found.'], 404);
-        $blog = Blog::find($id);
+        // return response()->json(['message' => 'No data found.'], 404);
+        $blog = Blog::where('isFeatured', true)->latest()->first();
 
         if (!$blog) {
             return response()->json(['error' => 'Blog not found'], 404);
