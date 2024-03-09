@@ -27,6 +27,7 @@ Route::get('/galleries/tag/{tagId}', [GalleryController::class, 'filterByTag']);
 Route::get('/galleries/{galleryId}/images', [ImageController::class, 'index']);
 Route::get('/galleries/{galleryId}/images/{imageId}', [ImageController::class, 'show']);
 
+Route::get('blogs/{id}/others', [BlogController::class, 'getOtherBlogs']);
 Route::get('blogs/featured', [BlogController::class, 'showFeatured']);
 Route::apiResource('blogs', BlogController::class);
 

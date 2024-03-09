@@ -39,6 +39,17 @@ class BlogController extends Controller
         return response()->json($blog);
     }
 
+    public function getOtherBlogs($id)
+    {
+        // Retrieve the current blog
+        $currentBlog = Blog::findOrFail($id);
+
+        // Retrieve other blogs excluding the current one
+        $otherBlogs = Blog::where('id', '!=', $id)->get();
+
+        return response()->json($otherBlogs);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
