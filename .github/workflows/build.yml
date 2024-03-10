@@ -21,7 +21,7 @@ jobs:
       - name: Install SSH key
         uses: webfactory/ssh-agent@v0.5.3
         with:
-          ssh-private-key: ${{ SSH_ACCESS_TOKEN_HOSTINGER_BACKEND }}
+          ssh-private-key: ${{ secrets.SSH_ACCESS_TOKEN_HOSTINGER_BACKEND }}
 
       - name: Deploy to Hostinger
         run: |
