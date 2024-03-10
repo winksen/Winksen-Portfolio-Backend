@@ -31,4 +31,4 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > /tmp/id_rsa
           chmod 600 /tmp/id_rsa
           echo "$SSH_PASSPHRASE" | ssh-add /tmp/id_rsa
-          ssh u167377926@62.72.37.84 -p 65002 "cd domains/winksen.com/public_html/web-backend/ && git pull origin main && composer install && php artisan migrate --force"
+          ssh -o StrictHostKeyChecking=no u167377926@62.72.37.84 -p 65002 "cd domains/winksen.com/public_html/web-backend/ && git pull origin main && composer install && php artisan migrate --force"
