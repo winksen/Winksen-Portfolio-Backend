@@ -18,12 +18,7 @@ jobs:
         with:
           php-version: '8.1'
 
-      # - name: Install SSH key
-      #   uses: webfactory/ssh-agent@v0.5.3
-      #   with:
-      #     ssh-private-key: ${{ secrets.SSH_ACCESS_TOKEN_HOSTINGER_BACKEND }}
-
-      - name: Install SSH key and Deploy
+      - name: Install SSH Ky and Deploy
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_HOSTINGER_BACKEND }}
           SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE_HOSTINGER_BACKEND }}
