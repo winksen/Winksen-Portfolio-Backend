@@ -18,13 +18,11 @@ jobs:
         with:
           php-version: '8.1'
 
-      - name: Install SSH Ky and Deploy
+      - name: Install SSH key and Deploy
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_HOSTINGER_BACKEND }}
-          SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE_HOSTINGER_BACKEND }}
-          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD_HOSTINGER_BACKEND }}
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN_HOSTINGER_WINKSEN }}
         run: |
-          export GITHUB_TOKEN
-          export SSH_PASSWORD
-          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no u167377926@62.72.37.84 -p 65002 "cd domains/winksen.com/public_html/web-backend/ && GIT_ASKPASS=/bin/echo GIT_SSH_COMMAND='ssh -o StrictHostKeyChecking=no -i /dev/stdin' git pull origin main && composer install && php artisan migrate --force"
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh -o StrictHostKeyChecking=no u167377926@62.72.37.84 -p 65002 "cd domains/winksen.com/public_html/web-backend/ && git pull origin main && composer install && php artisan migrate --force"
