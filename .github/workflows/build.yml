@@ -22,4 +22,7 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_HOSTINGER_BACKEND }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i domains/winksen.com/ssh/id_rsa u167377926@62.72.37.84 -p 65002 "cd domains/winksen.com/public_html/web-backend/ && git pull origin main && composer install && php artisan migrate --force"
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa u167377926@62.72.37.84 -p 65002 "cd domains/winksen.com/public_html/web-backend/ && git pull origin main && composer install && php artisan migrate --force"
