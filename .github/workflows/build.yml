@@ -3,7 +3,7 @@ name: Deploy to Hostinger
 on:
   push:
     branches:
-      - deploy
+      - main
 
 jobs:
   deploy:
@@ -25,4 +25,4 @@ jobs:
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa u167377926@62.72.37.84 -p 65002 "cd domains/winksen.com/public_html/web-backend/ && mkdir test && git pull origin deploy && composer install && php artisan migrate --force"
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa u167377926@62.72.37.84 -p 65002 "cd domains/winksen.com/public_html/web-backend/ && mkdir test && git clone git@github.com:winksen/Winksen-Portfolio-Backend.git . && composer install && php artisan migrate --force"
