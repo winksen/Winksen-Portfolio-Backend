@@ -25,4 +25,4 @@ jobs:
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa u167377926@62.72.37.84 -p 65002 "cd domains/winksen.com/public_html/web-backend/ && git clone git@github.com:winksen/Winksen-Portfolio-Backend.git . && composer install && php artisan migrate --force"
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa u167377926@62.72.37.84 -p 65002 "cd domains/winksen.com/public_html/web-backend/ && git clone https://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@github.com/ && composer install && php artisan migrate --force"
