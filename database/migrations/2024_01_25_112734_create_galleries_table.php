@@ -22,6 +22,7 @@ return new class extends Migration
             $table->longText('description')->nullable();
             $table->boolean('isNew')->default(0);
             $table->boolean('isHot')->default(0);
+            $table->boolean('isFeatured')->default(0);
             $table->boolean('tag1')->default(0);
             $table->boolean('tag2')->default(0);
             $table->boolean('tag3')->default(0);

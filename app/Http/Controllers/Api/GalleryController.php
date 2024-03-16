@@ -15,6 +15,18 @@ class GalleryController extends Controller
         return response()->json($galleries);
     }
 
+    public function showFeatured()
+    {
+        // return response()->json(['message' => 'No data found.'], 404);
+        $gallery = Gallery::where('isFeatured', true)->latest()->first();
+
+        if (!$gallery) {
+            return response()->json(['error' => 'Gallery not found'], 404);
+        }
+
+        return response()->json($gallery);
+    }
+
     public function show($id)
     {
         $gallery = Gallery::with('images')->find($id);

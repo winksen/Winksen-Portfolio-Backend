@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('galleries/featured', [GalleryController::class, 'showFeatured']);
 Route::apiResource('galleries', GalleryController::class);
 Route::get('/galleries/tag/{tagId}', [GalleryController::class, 'filterByTag']);
 Route::get('/galleries/{galleryId}/images', [ImageController::class, 'index']);
