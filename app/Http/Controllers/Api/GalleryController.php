@@ -35,7 +35,7 @@ class GalleryController extends Controller
 
     public function show($id)
     {
-        $gallery = Gallery::with('images')->find($id);
+        $gallery = Gallery::withCount('images')->with('images')->find($id);
 
         if (!$gallery) {
             return response()->json(['error' => 'Gallery not found'], 404);

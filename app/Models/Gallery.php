@@ -21,6 +21,7 @@ class Gallery extends Model
         'title',
         'date',
         'location',
+        'coordinates',
         'link',
         'description',
         'isNew',
