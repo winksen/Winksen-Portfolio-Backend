@@ -44,6 +44,17 @@ class GalleryController extends Controller
         return response()->json($gallery);
     }
 
+    public function getOtherGalleries($id)
+    {
+        // Retrieve the current gallery
+        $currentGallery = Gallery::findOrFail($id);
+
+        // Retrieve other galleries excluding the current one
+        $otherGalleries = Gallery::where('id', '!=', $id)->latest()->limit(4)->get();
+
+        return response()->json($otherGalleries);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
