@@ -31,6 +31,7 @@ class CreateImagesTable extends Migration
             $table->string('aperture')->nullable();
             $table->string('iso')->nullable();           
             $table->string('software')->nullable();
+            $table->integer('rating')->nullable();
         });
     }
 

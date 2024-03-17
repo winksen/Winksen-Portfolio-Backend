@@ -23,6 +23,7 @@ class Image extends Model
         'alt',
         'gallery',
         'date',
+        'location',
         'dimensions',
         'imageType',
         'fileName',
@@ -34,6 +35,7 @@ class Image extends Model
         'aperture',
         'iso',
         'software',
+        'rating',
     ];
 
     public function gallery()

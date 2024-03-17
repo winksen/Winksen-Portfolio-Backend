@@ -10,8 +10,14 @@ class GalleryController extends Controller
 {
     public function index()
     {
-        // return response()->json(['message' => 'No data found.']);
-        $galleries = Gallery::with('images')->paginate(4);
+        // Get the ID of the last featured blog
+        $lastFeaturedGalleryId = Gallery::where('isFeatured', true)
+            ->orderBy('created_at', 'desc')
+            ->value('id');
+
+        // Get all galleries except the last featured one
+        $galleries = Gallery::where('id', '!=', $lastFeaturedGalleryId)->with('images')->paginate(4);
+
         return response()->json($galleries);
     }
 
