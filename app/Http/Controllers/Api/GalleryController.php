@@ -16,7 +16,7 @@ class GalleryController extends Controller
             ->value('id');
 
         // Get all galleries except the last featured one
-        $galleries = Gallery::where('id', '!=', $lastFeaturedGalleryId)->with('images')->paginate(4);
+        $galleries = Gallery::where('id', '!=', $lastFeaturedGalleryId)->withCount('images')->with('images')->paginate(4);
 
         return response()->json($galleries);
     }
@@ -24,7 +24,7 @@ class GalleryController extends Controller
     public function showFeatured()
     {
         // return response()->json(['message' => 'No data found.'], 404);
-        $gallery = Gallery::where('isFeatured', true)->latest()->first();
+        $gallery = Gallery::where('isFeatured', true)->withCount('images')->latest()->first();
 
         if (!$gallery) {
             return response()->json(['error' => 'Gallery not found'], 404);
