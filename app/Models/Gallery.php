@@ -47,6 +47,7 @@ class Gallery extends Model
         'tag18',
         'tag19',
         'tag20',
+        'tag21',
     ];
 
     public function images()
