@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use App\Models\ChangeLog;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ class ChangeLogController extends Controller
                     'version' => $log->version,
                 ],
                 'comment' => $log->comment,
-                'date' => $log->created_at->from(),
+                'date' => Carbon::parse($log->date)->from(),
             ];
         });
 

@@ -24,4 +24,13 @@ class Changelog extends Model
         'comment',
         'date',
     ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array<int, string>
+     */
+    protected $dates = [
+        'date',
+    ];
 }

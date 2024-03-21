@@ -2,12 +2,14 @@
 
 namespace App\Console\Commands;
 
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use App\Models\User;
 use App\Models\Gallery;
 use App\Models\Image;
 use App\Models\Blog;
 use App\Models\Content;
+use App\Models\ChangeLog;
 
 class ImportDataFromCsv extends Command
 {
@@ -22,6 +24,7 @@ class ImportDataFromCsv extends Command
         $this->importData(Image::class, 'images.csv');
         $this->importData(Blog::class, 'blogs.csv');
         $this->importData(Content::class, 'contents.csv');
+        $this->importData(ChangeLog::class, 'changelogs.csv');
     }
 
     private function importData($modelClass, $filename)
@@ -33,6 +36,12 @@ class ImportDataFromCsv extends Command
 
             while ($row = fgetcsv($csvFile)) {
                 $data = array_combine($headers, $row);
+                
+                // Check if the 'date' column exists and needs to be converted
+                if (isset($data['date'])) {
+                    $data['date'] = Carbon::parse($data['date'])->toDateTimeString();
+                }
+
                 $modelClass::create($data);
             }
 
@@ -43,5 +52,6 @@ class ImportDataFromCsv extends Command
             $this->error("Failed to open $filename");
         }
     }
+
 }
 

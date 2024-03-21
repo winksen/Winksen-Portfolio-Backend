@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('href')->nullable();
             $table->string('version')->nullable();
             $table->string('comment')->nullable();
-            $table->string('date')->nullable();
+            $table->datetime('date')->nullable();
         });
     }
 
