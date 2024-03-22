@@ -67,7 +67,12 @@ class GalleryController extends Controller
         $currentGallery = Gallery::findOrFail($id);
 
         // Retrieve other galleries excluding the current one
-        $otherGalleries = Gallery::where('id', '!=', $id)->latest()->limit(4)->get();
+        $otherGalleries = Gallery::where('id', '!=', $id)->withCount('images')->latest()->limit(4)->get();
+
+        $otherGalleries->transform(function ($gallery) {
+            $gallery->formatted_date = Carbon::parse($gallery->date)->format('F Y');
+            return $gallery;
+        });
 
         return response()->json($otherGalleries);
     }
