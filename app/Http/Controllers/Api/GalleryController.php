@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use App\Models\Gallery;
 use Illuminate\Http\Request;
@@ -10,21 +11,31 @@ class GalleryController extends Controller
 {
     public function index()
     {
-        // Get the ID of the last featured blog
         $lastFeaturedGalleryId = Gallery::where('isFeatured', true)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('date', 'desc')
             ->value('id');
 
-        // Get all galleries except the last featured one
         $galleries = Gallery::where('id', '!=', $lastFeaturedGalleryId)->withCount('images')->with('images')->paginate(4);
+
+        $galleries->getCollection()->transform(function ($gallery) {
+            $gallery->formatted_date = Carbon::parse($gallery->date)->format('F Y');
+            // $gallery->difference_date = Carbon::parse($gallery->date)->from();
+
+            $gallery->images->transform(function ($image) {
+                $image->formatted_date = Carbon::parse($image->date)->format('F d, Y');
+                return $image;
+            });
+
+            return $gallery;
+        });
 
         return response()->json($galleries);
     }
 
     public function showFeatured()
     {
-        // return response()->json(['message' => 'No data found.'], 404);
         $gallery = Gallery::where('isFeatured', true)->withCount('images')->latest()->first();
+        $gallery->formatted_date = Carbon::parse($gallery->date)->format('F Y');
 
         if (!$gallery) {
             return response()->json(['error' => 'Gallery not found'], 404);
@@ -36,6 +47,12 @@ class GalleryController extends Controller
     public function show($id)
     {
         $gallery = Gallery::withCount('images')->with('images')->find($id);
+        $gallery->formatted_date = Carbon::parse($gallery->date)->format('F Y');
+
+        $gallery->images->transform(function ($image) {
+            $image->formatted_date = Carbon::parse($image->date)->format('F d, Y');
+            return $image;
+        });
 
         if (!$gallery) {
             return response()->json(['error' => 'Gallery not found'], 404);

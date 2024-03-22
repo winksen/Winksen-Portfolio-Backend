@@ -27,6 +27,8 @@ class Blog extends Model
         'description',
     ];
 
+    protected $dates = ['date'];
+
     public function contents()
     {
         return $this->hasMany(Content::class);

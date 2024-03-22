@@ -40,6 +40,8 @@ class Image extends Model
         'rating',
     ];
 
+    protected $dates = ['date'];
+
     public function gallery()
     {
         return $this->belongsTo(Gallery::class);

@@ -50,6 +50,8 @@ class Gallery extends Model
         'tag21',
     ];
 
+    protected $dates = ['date'];
+
     public function images()
     {
         return $this->hasMany(Image::class);

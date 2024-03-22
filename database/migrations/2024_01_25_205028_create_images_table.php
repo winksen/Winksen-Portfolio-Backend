@@ -17,7 +17,7 @@ class CreateImagesTable extends Migration
             $table->string('title')->nullable();
             $table->string('alt')->nullable();
             $table->string('gallery')->nullable();
-            $table->string('date')->nullable();
+            $table->datetime('date')->nullable();
             $table->string('location')->nullable();
             $table->string('coordinates')->nullable();
             $table->string('dimensions')->nullable();

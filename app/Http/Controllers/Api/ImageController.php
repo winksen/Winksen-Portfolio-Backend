@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use App\Models\Image;
 use Illuminate\Http\Request;
@@ -11,11 +12,14 @@ class ImageController extends Controller
     public function index($galleryId)
     {
         $images = Image::where('gallery_id', $galleryId)->get();
+        
         return response()->json($images);
     }
+
     public function show($galleryId, $imageId)
     {
         $image = Image::find($imageId);
+        $image->formatted_date = Carbon::parse($image->date)->format('F d, Y');
 
         if (!$image) {
             return response()->json(['error' => 'Image not found'], 404);
