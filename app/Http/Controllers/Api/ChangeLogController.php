@@ -11,7 +11,7 @@ class ChangeLogController extends Controller
 {
     public function index()
     {
-        $changeLogs = ChangeLog::orderBy('created_at', 'desc')->get();
+        $changeLogs = ChangeLog::orderBy('date', 'desc')->get();
 
         if ($changeLogs->isEmpty()) {
             return response()->json(['message' => 'No data found.'], 404);
@@ -108,13 +108,13 @@ class ChangeLogController extends Controller
 
     public function filterByType($typeName)
     {
-        $validTypeNames = ['newPage', 'newBugFix', 'pageImprovement'];
+        $validTypeNames = ['newPage', 'newBugFix', 'pageImprovement', 'uiFix'];
 
         if (!in_array($typeName, $validTypeNames)) {
             return response()->json(['error' => 'Invalid type name'], 404);
         }
 
-        $changeLogs = ChangeLog::where("type", $typeName)->orderBy('created_at', 'desc')->get();
+        $changeLogs = ChangeLog::where("type", $typeName)->orderBy('date', 'desc')->get();
 
         if ($changeLogs->isEmpty()) {
             return response()->json(['error' => 'No ChangeLogs found for the specified type'], 404);
@@ -130,7 +130,7 @@ class ChangeLogController extends Controller
                     'version' => $log->version,
                 ],
                 'comment' => $log->comment,
-                'date' => $log->created_at->from(),
+                'date' => Carbon::parse($log->date)->from(),
             ];
         });
 
