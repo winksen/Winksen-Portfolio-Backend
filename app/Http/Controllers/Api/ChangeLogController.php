@@ -108,7 +108,7 @@ class ChangeLogController extends Controller
 
     public function filterByType($typeName)
     {
-        $validTypeNames = ['newPage', 'newBugFix', 'pageImprovement', 'uiFix'];
+        $validTypeNames = ['newPage', 'bugFix', 'pageImprovement', 'uiFix'];
 
         if (!in_array($typeName, $validTypeNames)) {
             return response()->json(['error' => 'Invalid type name'], 404);
