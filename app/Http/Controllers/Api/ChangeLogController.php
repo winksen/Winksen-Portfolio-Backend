@@ -28,6 +28,7 @@ class ChangeLogController extends Controller
                 ],
                 'comment' => $log->comment,
                 'date' => Carbon::parse($log->date)->from(),
+                'timestamp' => $log->date,
             ];
         });
 
@@ -131,6 +132,7 @@ class ChangeLogController extends Controller
                 ],
                 'comment' => $log->comment,
                 'date' => Carbon::parse($log->date)->from(),
+                'timestamp' => $log->date,
             ];
         });
 
