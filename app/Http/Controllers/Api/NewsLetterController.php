@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\NewsLetter;
 use Illuminate\Http\Request;
 
@@ -18,17 +19,34 @@ class NewsLetterController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
-    }
+    // public function create()
+    // {
+    // }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'email' => 'required|string|email',
+        ]);
+    
+        // Check if the email already exists
+        $existingEmail = NewsLetter::where('email', $request->input('email'))->exists();
+        if ($existingEmail) {
+            return response()->json(['error' => 'Email already exists'], 400);
+        }
+
+        $email = NewsLetter::create([
+            'email' => $request->input('email'),
+            // 'option1' => $request->input('option1'),
+            // 'option2' => $request->input('option2'),
+            // 'option3' => $request->input('option3'),
+            // 'option4' => $request->input('option4'),
+        ]);
+
+        return response()->json(['email' => $email], 201);
     }
 
     /**
