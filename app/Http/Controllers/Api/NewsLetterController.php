@@ -38,13 +38,23 @@ class NewsLetterController extends Controller
             return response()->json(['error' => 'Email already exists'], 400);
         }
 
-        $email = NewsLetter::create([
+        $emailData = [
             'email' => $request->input('email'),
-            // 'option1' => $request->input('option1'),
-            // 'option2' => $request->input('option2'),
-            // 'option3' => $request->input('option3'),
-            // 'option4' => $request->input('option4'),
-        ]);
+        ];
+        
+        if ($request->filled('option1')) {
+            $emailData['option1'] = $request->input('option1');
+        }
+        
+        if ($request->filled('option2')) {
+            $emailData['option2'] = $request->input('option2');
+        }
+        
+        if ($request->filled('option3')) {
+            $emailData['option3'] = $request->input('option3');
+        }
+        
+        $email = NewsLetter::create($emailData);
 
         return response()->json(['email' => $email], 201);
     }
