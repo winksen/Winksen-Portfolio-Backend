@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\BlogController;
 use App\Http\Controllers\Api\ChangeLogController;
 use App\Http\Controllers\Api\NewsLetterController;
+use App\Http\Controllers\Api\ContactController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,3 +39,4 @@ Route::get('changelogs/{typeName}', [ChangeLogController::class, 'filterByType']
 Route::apiResource('changelogs', ChangeLogController::class);
 
 Route::apiResource('newsletter', NewsLetterController::class);
+Route::apiResource('contact', ContactController::class);

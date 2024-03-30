@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 
@@ -28,7 +29,26 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'email' => 'required|string|email',
+            'firstname' => 'required|string',
+            'lastname' => 'required|string',
+        ]);
+
+        $contactData = [
+            'email' => $request->input('email'),
+            'firstname' => $request->input('firstname'),
+            'lastname' => $request->input('lastname'),
+        ];
+        
+        if ($request->filled('company')) { $emailData['company'] = $request->input('company'); }
+        if ($request->filled('phone')) { $emailData['phone'] = $request->input('phone'); }
+        if ($request->filled('description')) { $emailData['description'] = $request->input('description'); }
+        if ($request->filled('source')) { $emailData['source'] = $request->input('source'); }
+        
+        $contact = Contact::create($contactData);
+
+        return response()->json(['contact' => $contact], 201);
     }
 
     /**
