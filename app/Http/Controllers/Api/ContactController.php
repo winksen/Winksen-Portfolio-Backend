@@ -41,10 +41,10 @@ class ContactController extends Controller
             'lastname' => $request->input('lastname'),
         ];
         
-        if ($request->filled('company')) { $emailData['company'] = $request->input('company'); }
-        if ($request->filled('phone')) { $emailData['phone'] = $request->input('phone'); }
-        if ($request->filled('description')) { $emailData['description'] = $request->input('description'); }
-        if ($request->filled('source')) { $emailData['source'] = $request->input('source'); }
+        if ($request->input('company')) { $contactData['company'] = $request->input('company'); }
+        if ($request->input('phone')) { $contactData['phone'] = $request->input('phone'); }
+        if ($request->input('description')) { $contactData['description'] = $request->input('description'); }
+        if ($request->input('source')) { $contactData['source'] = $request->input('source'); }
         
         $contact = Contact::create($contactData);
 
