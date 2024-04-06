@@ -15,7 +15,7 @@ class GalleryController extends Controller
             ->orderBy('date', 'desc')
             ->value('id');
 
-        $galleries = Gallery::where('id', '!=', $lastFeaturedGalleryId)->withCount('images')->with('images')->paginate(4);
+        $galleries = Gallery::where('id', '!=', $lastFeaturedGalleryId)->withCount('images')->with('images')->paginate(3);
 
         $galleries->getCollection()->transform(function ($gallery) {
             $gallery->formatted_date = Carbon::parse($gallery->date)->format('F Y');

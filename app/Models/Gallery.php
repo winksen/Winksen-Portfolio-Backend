@@ -48,6 +48,8 @@ class Gallery extends Model
         'tag19',
         'tag20',
         'tag21',
+        'tag22',
+        'tag23',
     ];
 
     protected $dates = ['date'];

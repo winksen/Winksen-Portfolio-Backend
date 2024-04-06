@@ -45,6 +45,8 @@ return new class extends Migration
             $table->boolean('tag19')->default(0);
             $table->boolean('tag20')->default(0);
             $table->boolean('tag21')->default(0);
+            $table->boolean('tag22')->default(0);
+            $table->boolean('tag23')->default(0);
         });
     }
 
