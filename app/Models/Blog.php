@@ -16,6 +16,7 @@ class Blog extends Model
         'title',
         'author',
         'link',
+        'category',
         'readTime',
         'publishDate',
         'revisions',

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->datetime('date')->nullable();
             $table->string('author')->nullable();
             $table->string('link')->nullable();
+            $table->string('category')->nullable();
             $table->string('readTime')->nullable();
             $table->string('publishDate')->nullable();
             $table->integer('revisions')->nullable();
