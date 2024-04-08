@@ -16,7 +16,7 @@ class BlogController extends Controller
             ->value('id');
 
         // Get all blogs except the last featured one
-        $blogs = Blog::where('id', '!=', $lastFeaturedBlogId)->paginate(4);
+        $blogs = Blog::where('id', '!=', $lastFeaturedBlogId)->with('contents')->paginate(4);
 
         return response()->json($blogs);
     }
@@ -35,7 +35,7 @@ class BlogController extends Controller
 
     public function show($id)
     {
-        $blog = Blog::find($id);
+        $blog = Blog::with('contents')->find($id);
 
         if (!$blog) {
             return response()->json(['error' => 'Blog not found'], 404);

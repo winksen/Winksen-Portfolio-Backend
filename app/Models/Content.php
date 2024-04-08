@@ -15,6 +15,12 @@ class Content extends Model
         'blog_id',
         'type',
         'content',
+        'listTitle',
+        'tableTitle',
+        'tableDescription',
+        'imageUrl',
+        'imageAlt',
+        'imageDescription',
     ];
 
     public function blog()

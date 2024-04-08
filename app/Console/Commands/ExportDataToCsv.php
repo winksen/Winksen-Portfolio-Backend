@@ -8,6 +8,9 @@ use App\Models\Gallery;
 use App\Models\Image;
 use App\Models\Blog;
 use App\Models\Content;
+use App\Models\Changelog;
+use App\Models\Contact;
+use App\Models\Newsletter;
 
 class ExportDataToCsv extends Command
 {
@@ -22,6 +25,9 @@ class ExportDataToCsv extends Command
         $this->exportData(Image::class, 'images.csv');
         $this->exportData(Blog::class, 'blogs.csv');
         $this->exportData(Content::class, 'contents.csv');
+        $this->exportData(Changelog::class, 'changelogs.csv');
+        $this->exportData(Contact::class, 'contacts.csv');
+        $this->exportData(Newsletter::class, 'newsletters.csv');
     }
 
     private function exportData($modelClass, $filename)

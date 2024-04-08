@@ -10,6 +10,8 @@ use App\Models\Image;
 use App\Models\Blog;
 use App\Models\Content;
 use App\Models\ChangeLog;
+use App\Models\Contact;
+use App\Models\Newsletter;
 
 class ImportDataFromCsv extends Command
 {
@@ -25,6 +27,8 @@ class ImportDataFromCsv extends Command
         $this->importData(Blog::class, 'blogs.csv');
         $this->importData(Content::class, 'contents.csv');
         $this->importData(ChangeLog::class, 'changelogs.csv');
+        $this->importData(Contact::class, 'contacts.csv');
+        $this->importData(Newsletter::class, 'newsletters.csv');
     }
 
     private function importData($modelClass, $filename)
