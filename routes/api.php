@@ -38,5 +38,8 @@ Route::apiResource('blogs', BlogController::class);
 Route::get('changelogs/{typeName}', [ChangeLogController::class, 'filterByType']);
 Route::apiResource('changelogs', ChangeLogController::class);
 
+Route::get('changelogs-contents/{typeName}', [ChangeLogController::class, 'filterByTypeContents']);
+Route::get('changelogs-contents', [ChangeLogController::class, 'indexContents']);
+
 Route::apiResource('newsletter', NewsLetterController::class);
 Route::apiResource('contact', ContactController::class);

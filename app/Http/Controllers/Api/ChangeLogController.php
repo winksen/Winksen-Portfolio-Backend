@@ -11,7 +11,33 @@ class ChangeLogController extends Controller
 {
     public function index()
     {
-        $changeLogs = ChangeLog::orderBy('date', 'desc')->get();
+        $changeLogs = ChangeLog::whereIn('type', ['bugFix', 'pageImprovement', 'uiFix', 'newPage'])->orderBy('date', 'desc')->get();
+
+        if ($changeLogs->isEmpty()) {
+            return response()->json(['message' => 'No data found.'], 404);
+        }
+
+        $formattedChangeLogs = $changeLogs->map(function ($log) {
+            return [
+                'id' => $log->id,
+                'type' => $log->type,
+                'details' => [
+                    'name' => $log->name,
+                    'href' => $log->href,
+                    'version' => $log->version,
+                ],
+                'comment' => $log->comment,
+                'date' => Carbon::parse($log->date)->from(),
+                'timestamp' => $log->date,
+            ];
+        });
+
+        return response()->json($formattedChangeLogs);
+    }
+
+    public function indexContents()
+    {
+        $changeLogs = ChangeLog::whereIn('type', ['blog', 'gallery', 'visualIdentity', 'website'])->orderBy('date', 'desc')->get();
 
         if ($changeLogs->isEmpty()) {
             return response()->json(['message' => 'No data found.'], 404);
@@ -110,6 +136,38 @@ class ChangeLogController extends Controller
     public function filterByType($typeName)
     {
         $validTypeNames = ['newPage', 'bugFix', 'pageImprovement', 'uiFix'];
+
+        if (!in_array($typeName, $validTypeNames)) {
+            return response()->json(['error' => 'Invalid type name'], 404);
+        }
+
+        $changeLogs = ChangeLog::where("type", $typeName)->orderBy('date', 'desc')->get();
+
+        if ($changeLogs->isEmpty()) {
+            return response()->json(['error' => 'No ChangeLogs found for the specified type'], 404);
+        }
+
+        $formattedChangeLogs = $changeLogs->map(function ($log) {
+            return [
+                'id' => $log->id,
+                'type' => $log->type,
+                'details' => [
+                    'name' => $log->name,
+                    'href' => $log->href,
+                    'version' => $log->version,
+                ],
+                'comment' => $log->comment,
+                'date' => Carbon::parse($log->date)->from(),
+                'timestamp' => $log->date,
+            ];
+        });
+
+        return response()->json($formattedChangeLogs);
+    }
+
+    public function filterByTypeContents($typeName)
+    {
+        $validTypeNames = ['blog', 'gallery', 'visualIdentity', 'website'];
 
         if (!in_array($typeName, $validTypeNames)) {
             return response()->json(['error' => 'Invalid type name'], 404);
