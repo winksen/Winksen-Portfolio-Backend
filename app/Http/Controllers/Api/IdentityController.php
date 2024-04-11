@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\Identity;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,13 @@ class IdentityController extends Controller
      */
     public function index()
     {
-        //
+        $lastFeaturedIdentityId = Identity::where('isFeatured', true)
+            ->orderBy('date', 'desc')
+            ->value('id');
+
+        $identities = Identity::where('id', '!=', $lastFeaturedIdentityId)->paginate(2);
+
+        return response()->json($identities);
     }
 
     /**

@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\BlogController;
 use App\Http\Controllers\Api\ChangeLogController;
 use App\Http\Controllers\Api\NewsLetterController;
 use App\Http\Controllers\Api\ContactController;
+use App\Http\Controllers\Api\IdentityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,3 +44,4 @@ Route::get('changelogs-contents', [ChangeLogController::class, 'indexContents'])
 
 Route::apiResource('newsletter', NewsLetterController::class);
 Route::apiResource('contact', ContactController::class);
+Route::apiResource('identities', IdentityController::class);
