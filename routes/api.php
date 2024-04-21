@@ -44,4 +44,6 @@ Route::get('changelogs-contents', [ChangeLogController::class, 'indexContents'])
 
 Route::apiResource('newsletter', NewsLetterController::class);
 Route::apiResource('contact', ContactController::class);
+
+Route::get('identities/featured', [IdentityController::class, 'showFeatured']);
 Route::apiResource('identities', IdentityController::class);

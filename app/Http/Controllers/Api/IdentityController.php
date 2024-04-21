@@ -22,6 +22,18 @@ class IdentityController extends Controller
         return response()->json($identities);
     }
 
+    public function showFeatured()
+    {
+        $identity = Identity::where('isFeatured', true)->latest()->first();
+        // $identity->formatted_date = Carbon::parse($identity->date)->format('F Y');
+
+        if (!$identity) {
+            return response()->json(['error' => 'Identity not found'], 404);
+        }
+
+        return response()->json($identity);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
