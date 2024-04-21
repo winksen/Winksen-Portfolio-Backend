@@ -17,12 +17,13 @@ return new class extends Migration
             $table->unsignedBigInteger('blog_id');
             $table->string('type'); // e.g., paragraph, quote, table, list, image
             $table->json('content');
-            $table->string('listTitle')->nullable();;
-            $table->string('tableTitle')->nullable();;
-            $table->string('tableDescription')->nullable();;
-            $table->string('imageUrl')->nullable();;
-            $table->string('imageAlt')->nullable();;
-            $table->string('imageDescription')->nullable();;
+            $table->string('listTitle')->nullable();
+            $table->string('tableTitle')->nullable();
+            $table->string('tableDescription')->nullable();
+            $table->string('imageUrl')->nullable();
+            $table->string('imageAlt')->nullable();
+            $table->string('imageDescription')->nullable();
+            $table->string('imageCredits')->nullable();
 
             $table->foreign('blog_id')->references('id')->on('blogs')->onDelete('cascade');
         });

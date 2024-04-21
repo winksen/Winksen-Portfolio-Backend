@@ -21,6 +21,7 @@ class Content extends Model
         'imageUrl',
         'imageAlt',
         'imageDescription',
+        'imageCredits',
     ];
 
     public function blog()
