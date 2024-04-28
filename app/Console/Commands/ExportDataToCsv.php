@@ -11,6 +11,7 @@ use App\Models\Content;
 use App\Models\Changelog;
 use App\Models\Contact;
 use App\Models\Newsletter;
+use App\Models\Identity;
 
 class ExportDataToCsv extends Command
 {
@@ -28,6 +29,7 @@ class ExportDataToCsv extends Command
         $this->exportData(Changelog::class, 'changelogs.csv');
         $this->exportData(Contact::class, 'contacts.csv');
         $this->exportData(Newsletter::class, 'newsletters.csv');
+        $this->exportData(Identity::class, 'identities.csv');
     }
 
     private function exportData($modelClass, $filename)

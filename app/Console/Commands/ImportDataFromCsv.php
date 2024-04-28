@@ -12,6 +12,7 @@ use App\Models\Content;
 use App\Models\ChangeLog;
 use App\Models\Contact;
 use App\Models\Newsletter;
+use App\Models\Identity;
 
 class ImportDataFromCsv extends Command
 {
@@ -29,6 +30,7 @@ class ImportDataFromCsv extends Command
         $this->importData(ChangeLog::class, 'changelogs.csv');
         $this->importData(Contact::class, 'contacts.csv');
         $this->importData(Newsletter::class, 'newsletters.csv');
+        $this->importData(Identity::class, 'identities.csv');
     }
 
     private function importData($modelClass, $filename)
