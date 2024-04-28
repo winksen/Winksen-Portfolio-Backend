@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use App\Models\Identity;
 use Illuminate\Http\Request;
@@ -34,6 +35,18 @@ class IdentityController extends Controller
         return response()->json($identity);
     }
 
+    public function show($id)
+    {
+        $identity = Identity::find($id);
+        $identity->formatted_date = Carbon::parse($identity->date)->format('F Y');
+
+        if (!$identity) {
+            return response()->json(['error' => 'Identity not found'], 404);
+        }
+
+        return response()->json($identity);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -46,14 +59,6 @@ class IdentityController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Identity $identity)
     {
         //
     }
