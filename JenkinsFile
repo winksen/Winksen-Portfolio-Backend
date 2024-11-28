@@ -13,7 +13,7 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'composer install --no-interaction --prefer-dist'
+                powershell 'composer install --no-interaction --prefer-dist'
             }
         }
 
