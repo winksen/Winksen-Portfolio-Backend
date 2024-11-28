@@ -1,0 +1,30 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/winksen/Winksen-Portfolio-Backend.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'composer install --no-interaction --prefer-dist'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh 'php artisan test'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                // Replace with your Hostinger deployment commands
+                sh 'scp -r ./* user@your-hostinger-server:/path/to/deploy'
+            }
+        }
+    }
+}
