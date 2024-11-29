@@ -9,7 +9,7 @@ pipeline {
         FTP_USER = credentials('ftp-user')
         FTP_PASS = credentials('ftp-pass')
         FTP_HOST = 'ftp.winksen.com'  // Replace with your actual FTP server hostname
-        WIN_SCP_DLL_PATH = 'C:\\Tools\\WinSCP\\WinSCPnet.dll' // Path to the WinSCP .NET assembly
+        WIN_SCP_DLL_PATH = 'C:\\Tools\\Jenkins\\WinSCPnet.dll' // Path to the WinSCP .NET assembly
     }
 
     stages {
@@ -64,6 +64,7 @@ pipeline {
                     Add-Type -Path "${env:WIN_SCP_DLL_PATH}"
                     Write-Output "[OK] Load WinSCP .NET Assembly"
                     Write-Host "Looking for WinSCPnet.dll at: ${env:WIN_SCP_DLL_PATH}"
+                    Write-Host "Test-Path result for WinSCPnet.dll: $(Test-Path ${env:WIN_SCP_DLL_PATH})"
 
                     # Set up the FTP Session
                     $sessionOptions = New-Object WinSCP.SessionOptions -Property @{
