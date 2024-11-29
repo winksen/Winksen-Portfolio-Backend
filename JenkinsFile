@@ -63,6 +63,7 @@ pipeline {
                     # Load WinSCP .NET Assembly
                     Add-Type -Path "${env:WIN_SCP_DLL_PATH}"
                     Write-Output "[OK] Load WinSCP .NET Assembly"
+                    Write-Host "Looking for WinSCPnet.dll at: ${env:WIN_SCP_DLL_PATH}"
 
                     # Set up the FTP Session
                     $sessionOptions = New-Object WinSCP.SessionOptions -Property @{
@@ -82,7 +83,7 @@ pipeline {
                         $session.PutFiles(".\\", "/public_html/backend/").Check()
 
                         # Upload the frontend to /public_html/frontend
-                        $session.PutFiles(".\\frontend\\", "/public_html/frontend/").Check()
+                        # $session.PutFiles(".\\frontend\\", "/public_html/frontend/").Check()
 
                         Write-Output "[OK] Initialize and open the session"
                         Write-Output "[OK] Deployment successful!"
