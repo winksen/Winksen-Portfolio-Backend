@@ -81,9 +81,24 @@ pipeline {
                     try {
                         $session.Open($sessionOptions)
                         Write-Output "[OK] Set up the FTP Session"
+                        Write-Host "Current working directory: $(Get-Location)"
 
                         # Upload the backend to /public_html/backend
-                        $session.PutFiles(".\\", "/public_html/backend/").Check()
+                        # Define the absolute path for the local directory (Jenkins workspace)
+                        $localPath = "C:\\data\\jenkins\\workspace\\Pipeline-Winksen-Portfolio-Backend"
+
+                        # Define the remote directory
+                        $remotePath = "/public_html/backend/"
+
+                        Write-Host "Attempting to upload files from $localPath to $remotePath"
+
+                        # Perform the file upload
+                        $session.PutFiles("$localPath\*", $remotePath).Check()  # The "*" ensures all files are uploaded
+
+                        Write-Host "File upload completed successfully."
+
+                        $session.PutFiles($localPath, $remotePath).Check()
+
                         Write-Output "[OK] Set up the FTP Session"
 
                         # Upload the frontend to /public_html/frontend
