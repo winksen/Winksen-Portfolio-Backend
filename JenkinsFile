@@ -77,11 +77,14 @@ pipeline {
 
                     # Initialize and open the session
                     $session = New-Object WinSCP.Session
+                    Write-Output "[OK] Set up the FTP Session"
                     try {
                         $session.Open($sessionOptions)
+                        Write-Output "[OK] Set up the FTP Session"
 
                         # Upload the backend to /public_html/backend
                         $session.PutFiles(".\\", "/public_html/backend/").Check()
+                        Write-Output "[OK] Set up the FTP Session"
 
                         # Upload the frontend to /public_html/frontend
                         # $session.PutFiles(".\\frontend\\", "/public_html/frontend/").Check()
