@@ -93,7 +93,7 @@ pipeline {
                         Write-Host "Attempting to upload files from $localPath to $remotePath"
 
                         # Perform the file upload
-                        $session.PutFiles("$localPath\*", $remotePath).Check()  # The "*" ensures all files are uploaded
+                        $session.PutFiles("$localPath\\*", $remotePath).Check()  # The "*" ensures all files are uploaded
 
                         Write-Host "File upload completed successfully."
 
