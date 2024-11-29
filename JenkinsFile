@@ -17,6 +17,15 @@ pipeline {
             }
         }
 
+        stage('Setup Environment') {
+            steps {
+                powershell '''
+                Copy-Item .env.example .env -Force
+                php artisan key:generate
+                '''
+            }
+        }
+
         stage('Run Tests') {
             steps {
                 powershell 'php artisan test'
