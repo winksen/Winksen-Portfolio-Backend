@@ -19,14 +19,14 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                sh 'php artisan test'
+                powershell 'php artisan test'
             }
         }
 
         stage('Deploy') {
             steps {
                 // Replace with your Hostinger deployment commands
-                sh 'scp -r ./* user@your-hostinger-server:/path/to/deploy'
+                powershell 'scp -r ./* user@your-hostinger-server:/path/to/deploy'
             }
         }
     }
