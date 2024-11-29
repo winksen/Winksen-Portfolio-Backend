@@ -9,7 +9,7 @@ pipeline {
         FTP_USER = credentials('ftp-user')
         FTP_PASS = credentials('ftp-pass')
         FTP_HOST = 'ftp.winksen.com'  // Replace with your actual FTP server hostname
-        WIN_SCP_DLL_PATH = 'C:\\tools\\WinSCP\\WinSCPnet.dll' // Path to the WinSCP .NET assembly
+        WIN_SCP_DLL_PATH = 'C:\\Tools\\WinSCP\\WinSCPnet.dll' // Path to the WinSCP .NET assembly
     }
 
     stages {
@@ -60,16 +60,18 @@ pipeline {
             steps {
                 script {
                     powershell '''
-                    # Load WinSCP .NET assembly
+                    # Load WinSCP .NET Assembly
                     Add-Type -Path "${env:WIN_SCP_DLL_PATH}"
+                    Write-Output "[OK] Load WinSCP .NET Assembly"
 
-                    # Set up the FTP session
+                    # Set up the FTP Session
                     $sessionOptions = New-Object WinSCP.SessionOptions -Property @{
                         Protocol   = [WinSCP.Protocol]::Ftp
                         HostName   = "${env:FTP_HOST}"
                         UserName   = "${env:FTP_USER}"
                         Password   = "${env:FTP_PASS}"
                     }
+                    Write-Output "[OK] Set up the FTP Session"
 
                     # Initialize and open the session
                     $session = New-Object WinSCP.Session
@@ -82,7 +84,8 @@ pipeline {
                         # Upload the frontend to /public_html/frontend
                         $session.PutFiles(".\\frontend\\", "/public_html/frontend/").Check()
 
-                        Write-Output "Deployment successful!"
+                        Write-Output "[OK] Initialize and open the session"
+                        Write-Output "[OK] Deployment successful!"
                     } catch {
                         Write-Error "Error: $_"
                     } finally {
