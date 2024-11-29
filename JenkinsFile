@@ -29,15 +29,16 @@ pipeline {
                 powershell '''
                 Copy-Item .env.example .env -Force
 
-                # Update .env file with database credentials
-                (Get-Content .env) -replace 'DB_HOST=.*', 'DB_HOST=${env:DB_HOST}' |
-                                     -replace 'DB_DATABASE=.*', 'DB_DATABASE=${env:DB_DATABASE}' |
-                                     -replace 'DB_USERNAME=.*', 'DB_USERNAME=${env:DB_USERNAME}' |
-                                     -replace 'DB_PASSWORD=.*', 'DB_PASSWORD=${env:DB_PASSWORD}' |
-                                     Set-Content .env
+                # Read and modify the .env file
+                (Get-Content .env) | ForEach-Object {
+                    $_ -replace '^DB_HOST=.*', "DB_HOST=${env:DB_HOST}" `
+                       -replace '^DB_DATABASE=.*', "DB_DATABASE=${env:DB_DATABASE}" `
+                       -replace '^DB_USERNAME=.*', "DB_USERNAME=${env:DB_USERNAME}" `
+                       -replace '^DB_PASSWORD=.*', "DB_PASSWORD=${env:DB_PASSWORD}"
+                } | Set-Content .env
                 
                 php artisan key:generate
-
+                
                 # Log the contents of the .env file for verification
                 Write-Output "Generated .env file contents:"
                 Get-Content .env
