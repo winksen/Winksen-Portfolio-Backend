@@ -13,7 +13,7 @@ pipeline {
         SSH_PASS = credentials('ssh-pass')
         SSH_HOST = '92.113.28.219'
         WIN_SCP_DLL_PATH = 'C:\\Tools\\Jenkins\\WinSCPnet.dll'
-        SSH_NET_DLL_PATH = 'C:\\Tools\\Jenkins\\Renci.SshNet.dll'
+        SSH_NET_DLL_PATH = 'C:\\Tools\\Jenkins\\SshNet.dll'
     }
 
     stages {
