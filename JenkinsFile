@@ -2,14 +2,16 @@ pipeline {
     agent any
 
     environment {
-        DB_HOST = credentials('db-host')        // Replace with your Jenkins secret ID for the DB host
-        DB_DATABASE = credentials('db-name')    // Replace with your Jenkins secret ID for the DB name
-        DB_USERNAME = credentials('db-user')    // Replace with your Jenkins secret ID for the DB user
-        DB_PASSWORD = credentials('db-pass')    // Replace with your Jenkins secret ID for the DB password
+        DB_HOST = credentials('db-host')
+        DB_DATABASE = credentials('db-name')
+        DB_USERNAME = credentials('db-user')
+        DB_PASSWORD = credentials('db-pass')
         FTP_USER = credentials('ftp-user')
         FTP_PASS = credentials('ftp-pass')
-        FTP_HOST = 'ftp.winksen.com'  // Replace with your actual FTP server hostname
-        WIN_SCP_DLL_PATH = 'C:\\Tools\\Jenkins\\WinSCPnet.dll' // Path to the WinSCP .NET assembly
+        FTP_HOST = 'ftp.winksen.com'
+        WIN_SCP_DLL_PATH = 'C:\\Tools\\Jenkins\\WinSCPnet.dll'
+        SSH_USER = credentials('ssh-user')
+        SSH_HOST = '92.113.28.219'
     }
 
     stages {
@@ -22,11 +24,14 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                powershell 'composer install --no-interaction --prefer-dist'
-            }
-        }
+        // stage('Install Dependencies') {
+        //     steps {
+        //         powershell '''
+        //         Write-Output "Installing Dependencies"
+        //         composer install --no-interaction --prefer-dist
+        //         '''
+        //     }
+        // }
 
         stage('Setup Environment') {
             steps {
@@ -88,7 +93,7 @@ pipeline {
                         $localPath = "C:\\data\\jenkins\\workspace\\Pipeline-Winksen-Portfolio-Backend"
 
                         # Define the remote directory
-                        $remotePath = "/public_html/backend/"
+                        $remotePath = "/"
 
                         Write-Host "Attempting to upload files from $localPath to $remotePath"
 
@@ -96,13 +101,7 @@ pipeline {
                         $session.PutFiles("$localPath\\*", $remotePath).Check()  # The "*" ensures all files are uploaded
 
                         Write-Host "File upload completed successfully."
-
-                        $session.PutFiles($localPath, $remotePath).Check()
-
                         Write-Output "[OK] Set up the FTP Session"
-
-                        # Upload the frontend to /public_html/frontend
-                        # $session.PutFiles(".\\frontend\\", "/public_html/frontend/").Check()
 
                         Write-Output "[OK] Initialize and open the session"
                         Write-Output "[OK] Deployment successful!"
