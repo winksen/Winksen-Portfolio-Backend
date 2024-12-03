@@ -9,9 +9,11 @@ pipeline {
         FTP_USER = credentials('ftp-user')
         FTP_PASS = credentials('ftp-pass')
         FTP_HOST = 'ftp.winksen.com'
-        WIN_SCP_DLL_PATH = 'C:\\Tools\\Jenkins\\WinSCPnet.dll'
         SSH_USER = credentials('ssh-user')
+        SSH_PASS = credentials('ssh-pass')
         SSH_HOST = '92.113.28.219'
+        WIN_SCP_DLL_PATH = 'C:\\Tools\\Jenkins\\WinSCPnet.dll'
+        SSH_NET_DLL_PATH = 'C:\\Tools\\Jenkins\\Renci.SshNet.dll'
     }
 
     stages {
@@ -24,94 +26,71 @@ pipeline {
             }
         }
 
-        // stage('Install Dependencies') {
-        //     steps {
-        //         powershell '''
-        //         Write-Output "Installing Dependencies"
-        //         composer install --no-interaction --prefer-dist
-        //         '''
-        //     }
-        // }
-
         stage('Setup Environment') {
             steps {
                 powershell '''
+                # Copy .env example and configure DB settings
                 Copy-Item .env.example .env -Force
-
-                # Read and modify the .env file
                 (Get-Content .env) | ForEach-Object {
                     $_ -replace '^DB_HOST=.*', "DB_HOST=${env:DB_HOST}" `
                        -replace '^DB_DATABASE=.*', "DB_DATABASE=${env:DB_DATABASE}" `
                        -replace '^DB_USERNAME=.*', "DB_USERNAME=${env:DB_USERNAME}" `
                        -replace '^DB_PASSWORD=.*', "DB_PASSWORD=${env:DB_PASSWORD}"
                 } | Set-Content .env
-
-                php artisan key:generate
-                
-                # Log the contents of the .env file for verification
-                Write-Output "Generated .env file contents:"
-                Get-Content .env
                 '''
-            }
-        }
-
-        stage('Run Tests') {
-            steps {
-                powershell 'php artisan test'
             }
         }
 
         stage('Deploy via FTP') {
             steps {
-                script {
-                    powershell '''
-                    # Load WinSCP .NET Assembly
-                    Add-Type -Path "${env:WIN_SCP_DLL_PATH}"
-                    Write-Output "[OK] Load WinSCP .NET Assembly"
-                    Write-Host "Looking for WinSCPnet.dll at: ${env:WIN_SCP_DLL_PATH}"
-                    Write-Host "Test-Path result for WinSCPnet.dll: $(Test-Path ${env:WIN_SCP_DLL_PATH})"
-
-                    # Set up the FTP Session
-                    $sessionOptions = New-Object WinSCP.SessionOptions -Property @{
-                        Protocol   = [WinSCP.Protocol]::Ftp
-                        HostName   = "${env:FTP_HOST}"
-                        UserName   = "${env:FTP_USER}"
-                        Password   = "${env:FTP_PASS}"
-                    }
-                    Write-Output "[OK] Set up the FTP Session"
-
-                    # Initialize and open the session
-                    $session = New-Object WinSCP.Session
-                    Write-Output "[OK] Set up the FTP Session"
-                    try {
-                        $session.Open($sessionOptions)
-                        Write-Output "[OK] Set up the FTP Session"
-                        Write-Host "Current working directory: $(Get-Location)"
-
-                        # Upload the backend to /public_html/backend
-                        # Define the absolute path for the local directory (Jenkins workspace)
-                        $localPath = "C:\\data\\jenkins\\workspace\\Pipeline-Winksen-Portfolio-Backend"
-
-                        # Define the remote directory
-                        $remotePath = "/"
-
-                        Write-Host "Attempting to upload files from $localPath to $remotePath"
-
-                        # Perform the file upload
-                        $session.PutFiles("$localPath\\*", $remotePath).Check()  # The "*" ensures all files are uploaded
-
-                        Write-Host "File upload completed successfully."
-                        Write-Output "[OK] Set up the FTP Session"
-
-                        Write-Output "[OK] Initialize and open the session"
-                        Write-Output "[OK] Deployment successful!"
-                    } catch {
-                        Write-Error "Error: $_"
-                    } finally {
-                        $session.Dispose()
-                    }
-                    '''
+                powershell '''
+                Add-Type -Path "${env:WIN_SCP_DLL_PATH}"
+                $sessionOptions = New-Object WinSCP.SessionOptions -Property @{
+                    Protocol   = [WinSCP.Protocol]::Ftp
+                    HostName   = "${env:FTP_HOST}"
+                    UserName   = "${env:FTP_USER}"
+                    Password   = "${env:FTP_PASS}"
                 }
+                $session = New-Object WinSCP.Session
+                try {
+                    $session.Open($sessionOptions)
+                    $session.PutFiles("C:\\data\\jenkins\\workspace\\Pipeline-Winksen-Portfolio-Backend\\*", "/public_html/backend/").Check()
+                } finally {
+                    $session.Dispose()
+                }
+                '''
+            }
+        }
+
+        stage('SSH Commands on Hostinger') {
+            steps {
+                powershell '''
+                # Load SSH.NET assembly (ensure the DLL is available)
+                Add-Type -Path "${env:SSH_NET_DLL_PATH}"
+                
+                # Create SSH connection
+                $connectionInfo = New-Object Renci.SshNet.PasswordConnectionInfo("${env:SSH_HOST}", 65002, "${env:SSH_USER}", "${env:SSH_PASS}")
+                $sshClient = New-Object Renci.SshNet.SshClient($connectionInfo)
+
+                try {
+                    $sshClient.Connect()
+                    
+                    # Run SSH commands
+                    $commands = @(
+                        "cd /domains/winksen.com/public_html/backend && composer install --no-interaction --prefer-dist",
+                        "cd /domains/winksen.com/public_html/backend && php artisan key:generate",
+                        "cd /domains/winksen.com/public_html/backend && php artisan test"
+                    )
+
+                    foreach ($cmd in $commands) {
+                        Write-Output "Running command: $cmd"
+                        $result = $sshClient.RunCommand($cmd)
+                        Write-Output $result.Result
+                    }
+                } finally {
+                    $sshClient.Disconnect()
+                }
+                '''
             }
         }
     }
