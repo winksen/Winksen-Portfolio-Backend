@@ -30,6 +30,7 @@ pipeline {
             steps {
                 powershell '''
                 # Copy .env example and configure DB settings
+                Write-Output "[PENDING] Setup Environment..."
                 Copy-Item .env.example .env -Force
                 (Get-Content .env) | ForEach-Object {
                     $_ -replace '^DB_HOST=.*', "DB_HOST=${env:DB_HOST}" `
@@ -37,6 +38,7 @@ pipeline {
                        -replace '^DB_USERNAME=.*', "DB_USERNAME=${env:DB_USERNAME}" `
                        -replace '^DB_PASSWORD=.*', "DB_PASSWORD=${env:DB_PASSWORD}"
                 } | Set-Content .env
+                Write-Output "[OK] Setup Environment Successfully"
                 '''
             }
         }
@@ -51,10 +53,18 @@ pipeline {
                     UserName   = "${env:FTP_USER}"
                     Password   = "${env:FTP_PASS}"
                 }
+
+                # Define Paths
+                $localPath = "C:\\data\\jenkins\\workspace\\Pipeline-Winksen-Portfolio-Backend"
+                $remotePath = "/"
+                Write-Output "[OK] Define Paths"
+
                 $session = New-Object WinSCP.Session
                 try {
+                    Write-Output "[PENDING] Upload Files..."
                     $session.Open($sessionOptions)
-                    $session.PutFiles("C:\\data\\jenkins\\workspace\\Pipeline-Winksen-Portfolio-Backend\\*", "/public_html/backend/").Check()
+                    $session.PutFiles("$localPath\\*", $remotePath).Check()  # The "*" ensures all files are uploaded
+                    Write-Output "[OK] Upload Files Successfully"
                 } finally {
                     $session.Dispose()
                 }
