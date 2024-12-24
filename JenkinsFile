@@ -83,7 +83,7 @@ pipeline {
                 $plink = "$env:PLINK_PATH"
                 
                 # Run the command using Plink with password and custom port
-                & $plink -ssh $user@$sshHost -P $sshPort -pw $password "cd /domains/winksen.com/public_html/backend && composer install --no-interaction --prefer-dist"
+                & $plink -ssh $user@$sshHost -P $sshPort -pw $password "cd domains/winksen.com/public_html/backend && composer2 install --no-interaction --prefer-dist"
                 '''
             }
         }
