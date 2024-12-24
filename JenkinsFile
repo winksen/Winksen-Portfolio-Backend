@@ -12,6 +12,7 @@ pipeline {
         SSH_USER = credentials('ssh-user')
         SSH_PASS = credentials('ssh-pass')
         SSH_HOST = '92.113.28.219'
+        PLINK_PATH = 'C:\\Program Files\\PuTTY\\plink.exe'
         WIN_SCP_DLL_PATH = 'C:\\Tools\\Jenkins\\WinSCPnet.dll'
         SSH_NET_DLL_PATH = 'C:\\Tools\\Jenkins\\SshNet.dll'
     }
@@ -75,44 +76,13 @@ pipeline {
         stage('SSH Commands on Hostinger') {
             steps {
                 powershell '''
-                # Load SSH.NET assembly (ensure the DLL is available)
-
-                try {
-                    Add-Type -Path "${env:SSH_NET_DLL_PATH}"
-                    } catch [System.Reflection.ReflectionTypeLoadException] {
-                        Write-Host "ReflectionTypeLoadException encountered."
-                        $_.Exception.LoaderExceptions | ForEach-Object {
-                            Write-Host $_.Message
-                        }
-                        throw
-                    } catch {
-                        Write-Host "General Exception: $($_.Exception.Message)"
-                        throw
-                    }
-                Add-Type -Path "${env:SSH_NET_DLL_PATH}"
+                $user = "$env:SSH_USER"
+                $password = "$env:SSH_PASSWORD"
+                $host = "92.113.28.219"
+                $plink = "$env:PLINK_PATH"
                 
-                # Create SSH connection
-                $connectionInfo = New-Object Renci.SshNet.PasswordConnectionInfo("${env:SSH_HOST}", 65002, "${env:SSH_USER}", "${env:SSH_PASS}")
-                $sshClient = New-Object Renci.SshNet.SshClient($connectionInfo)
-
-                try {
-                    $sshClient.Connect()
-                    
-                    # Run SSH commands
-                    $commands = @(
-                        "cd /domains/winksen.com/public_html/backend && composer install --no-interaction --prefer-dist",
-                        "cd /domains/winksen.com/public_html/backend && php artisan key:generate",
-                        "cd /domains/winksen.com/public_html/backend && php artisan test"
-                    )
-
-                    foreach ($cmd in $commands) {
-                        Write-Output "Running command: $cmd"
-                        $result = $sshClient.RunCommand($cmd)
-                        Write-Output $result.Result
-                    }
-                } finally {
-                    $sshClient.Disconnect()
-                }
+                # Run the command using Plink with password
+                & $plink -ssh $user@$host -pw $password "cd /domains/winksen.com/public_html/backend && composer install --no-interaction --prefer-dist"
                 '''
             }
         }
