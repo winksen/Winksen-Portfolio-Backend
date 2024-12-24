@@ -78,11 +78,12 @@ pipeline {
                 powershell '''
                 $user = "$env:SSH_USER"
                 $password = "$env:SSH_PASS"
-                $sshHost = "92.113.28.219"  # Renamed the variable to avoid conflict
+                $sshHost = "92.113.28.219"
+                $sshPort = 65002 
                 $plink = "$env:PLINK_PATH"
                 
-                # Run the command using Plink with password
-                & $plink -ssh $user@$sshHost -pw $password "cd /domains/winksen.com/public_html/backend && composer install --no-interaction --prefer-dist"
+                # Run the command using Plink with password and custom port
+                & $plink -ssh $user@$sshHost -P $sshPort -pw $password "cd /domains/winksen.com/public_html/backend && composer install --no-interaction --prefer-dist"
                 '''
             }
         }
