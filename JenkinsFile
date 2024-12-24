@@ -76,6 +76,19 @@ pipeline {
             steps {
                 powershell '''
                 # Load SSH.NET assembly (ensure the DLL is available)
+
+                try {
+                    Add-Type -Path "${env:SSH_NET_DLL_PATH}"
+                    } catch [System.Reflection.ReflectionTypeLoadException] {
+                        Write-Host "ReflectionTypeLoadException encountered."
+                        $_.Exception.LoaderExceptions | ForEach-Object {
+                            Write-Host $_.Message
+                        }
+                        throw
+                    } catch {
+                        Write-Host "General Exception: $($_.Exception.Message)"
+                        throw
+                    }
                 Add-Type -Path "${env:SSH_NET_DLL_PATH}"
                 
                 # Create SSH connection
