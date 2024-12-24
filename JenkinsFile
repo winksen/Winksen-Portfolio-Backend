@@ -77,7 +77,7 @@ pipeline {
             steps {
                 powershell '''
                 $user = "$env:SSH_USER"
-                $password = "$env:SSH_PASSWORD"
+                $password = "$env:SSH_PASS"
                 $sshHost = "92.113.28.219"  # Renamed the variable to avoid conflict
                 $plink = "$env:PLINK_PATH"
                 
