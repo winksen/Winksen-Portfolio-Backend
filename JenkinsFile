@@ -77,13 +77,12 @@ pipeline {
             steps {
                 powershell '''
                 $user = "$env:SSH_USER"
-                $password = "$env:SSH_PASS"
                 $sshHost = "92.113.28.219"
-                $sshPort = 65002 
-                $plink = "$env:PLINK_PATH"
-                
-                # Run the command using Plink with password and custom port
-                & $plink -ssh $user@$sshHost -P $sshPort -pw $password "cd domains/winksen.com/public_html/backend && composer2 install --no-interaction --prefer-dist"
+                $sshPort = 65002
+                $privateKeyPath = "C:\\Users\\Amine\\.ssh\\id_rsa" 
+
+                # Use ssh.exe with the private key for authentication
+                Start-Process -FilePath "C:\\Windows\\System32\\OpenSSH\\ssh.exe" -ArgumentList "-i", $privateKeyPath, "-p", $sshPort, "$user@$sshHost", "cd domains/winksen.com/public_html/backend && composer2 install --no-interaction --prefer-dist" -Wait
                 '''
             }
         }
