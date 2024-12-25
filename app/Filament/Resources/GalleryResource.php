@@ -53,11 +53,13 @@ class GalleryResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('imageUrl')
+                    ->label('Image'),
                 Tables\Columns\TextColumn::make('id')->label('ID'),
                 Tables\Columns\TextColumn::make('title')->label('Title'),
                 Tables\Columns\TextColumn::make('date')->dateTime()->label('Date'),
                 Tables\Columns\TextColumn::make('location')->label('Location'),
-                Tables\Columns\TextColumn::make('link')->label('Link'),
+                // Tables\Columns\TextColumn::make('link')->label('Link'),
             ])
             ->filters([/* Add filters if necessary */])
             ->actions([
@@ -100,20 +102,64 @@ class GalleryResource extends Resource
             Forms\Components\TextInput::make('location')
                 ->maxLength(255),
 
-            Forms\Components\DatePicker::make('date')
+            FileUpload::make('imageUrl')
+                ->label('Image Upload')
+                ->image()
+                ->required()
+                ->disk('public')
+                ->directory('galleries')
+                // ->maxSize(1024)
+                ->columnSpan('full'),
+
+            DatePicker::make('date')
                 ->label('Date')
-                ->required(),
+                ->native(false),
 
             Forms\Components\TextInput::make('link')
-                ->url()
                 ->maxLength(255),
 
             Forms\Components\Textarea::make('description')
                 ->columnSpan('full'),
 
-            Forms\Components\Toggle::make('isNew')->default(false),
-            Forms\Components\Toggle::make('isHot')->default(false),
-            Forms\Components\Toggle::make('isFeatured')->default(false),
+            Section::make('Options')
+            ->schema([
+                Forms\Components\Toggle::make('isNew')->label('New')->default(false),
+                Forms\Components\Toggle::make('isHot')->label('Hot')->default(false),
+                Forms\Components\Toggle::make('isFeatured')->label('Featured')->default(false),
+            ])
+            ->columns(3)
+            ->collapsible(),
+
+            Section::make('Tags')
+            ->schema([
+                Forms\Components\Checkbox::make('tag1')->label('Travel')->default(false),
+                Forms\Components\Checkbox::make('tag2')->label('Landscapes')->default(false),
+                Forms\Components\Checkbox::make('tag3')->label('Portraits')->default(false),
+                Forms\Components\Checkbox::make('tag4')->label('Culture')->default(false),
+                Forms\Components\Checkbox::make('tag5')->label('Food')->default(false),
+                Forms\Components\Checkbox::make('tag6')->label('Wildlife')->default(false),
+                Forms\Components\Checkbox::make('tag7')->label('Abstract')->default(false),
+                Forms\Components\Checkbox::make('tag8')->label('Historical')->default(false),
+                Forms\Components\Checkbox::make('tag9')->label('Macro')->default(false),
+                Forms\Components\Checkbox::make('tag10')->label('Symmetry')->default(false),
+                Forms\Components\Checkbox::make('tag11')->label('Street Photography')->default(false),
+                Forms\Components\Checkbox::make('tag12')->label('Black and White')->default(false),
+                Forms\Components\Checkbox::make('tag13')->label('Architecture')->default(false),
+                Forms\Components\Checkbox::make('tag14')->label('Night')->default(false),
+                Forms\Components\Checkbox::make('tag15')->label('Fashion')->default(false),
+                Forms\Components\Checkbox::make('tag16')->label('Cityscapes')->default(false),
+                Forms\Components\Checkbox::make('tag17')->label('Sunset/Sunrise')->default(false),
+                Forms\Components\Checkbox::make('tag18')->label('Rural Life')->default(false),
+                Forms\Components\Checkbox::make('tag19')->label('Underwater')->default(false),
+                Forms\Components\Checkbox::make('tag20')->label('Events')->default(false),
+                Forms\Components\Checkbox::make('tag21')->label('Religious')->default(false),
+                Forms\Components\Checkbox::make('tag22')->label('Birds')->default(false),
+                Forms\Components\Checkbox::make('tag23')->label('Sea')->default(false),
+
+            ])
+            ->columns(4)
+            ->collapsible(),
+
         ];
     }
 
@@ -132,10 +178,10 @@ class GalleryResource extends Resource
                 FileUpload::make('imageUrl')
                     ->label('Image Upload')
                     ->image()
-                    ->required()
-                    ->disk('public') // Or whatever disk you're using
-                    ->directory('galleries/images')
-                    ->maxSize(1024), // Optional, adjust as necessary
+                    // ->required()
+                    ->disk('public')
+                    // ->maxSize(1024)
+                    ->directory('galleries/images'),
 
                 Section::make('Image Details')
                     ->schema([
@@ -146,10 +192,6 @@ class GalleryResource extends Resource
                         Forms\Components\TextInput::make('alt')
                             ->label('Alt Text')
                             ->maxLength(255),
-
-                        // Forms\Components\DateTimePicker::make('date')
-                        //     ->label('Date')
-                        //     ->required(),
 
                         DatePicker::make('date')
                             ->label('Date')
@@ -169,12 +211,15 @@ class GalleryResource extends Resource
 
                         Forms\Components\TextInput::make('size')
                             ->label('Size')
-                            ->numeric()
                             ->maxLength(255),
 
-                        Forms\Components\TextInput::make('imageType')
+                        Forms\Components\Select::make('imageType')
                             ->label('Image Type')
-                            ->maxLength(255),
+                            ->options([
+                                'JPG' => 'JPG',
+                                'PNG' => 'PNG',
+                            ])
+                            ->default('JPG'),
 
                         Forms\Components\TextInput::make('fileName')
                             ->label('File Name')
@@ -212,16 +257,23 @@ class GalleryResource extends Resource
                             ->label('Software')
                             ->maxLength(255),
 
-                        Forms\Components\TextInput::make('rating')
+                        Forms\Components\Select::make('rating')
                             ->label('Rating')
-                            ->numeric()
-                            ->maxLength(5), // Optional, adjust as necessary
+                            ->options([
+                                '1' => '1 Star',
+                                '2' => '2 Stars',
+                                '3' => '3 Stars',
+                                '4' => '4 Stars',
+                                '5' => '5 Stars',
+                            ])
+                            ->default('3')
+                            ->required(),                     
                     ])
-                    ->columns(3) // Arrange fields in three columns
-                    ->collapsible(), // Make the section collapsible for better usability
+                    ->columns(4)
+                    ->collapsible(),
             ])
             ->defaultItems(1) // Optional: default to one item when no images are added
-            ->orderColumn('title')
+            ->orderColumn('id')
             ->required();
     }
 
