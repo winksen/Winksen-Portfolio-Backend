@@ -18,4 +18,19 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+
+    # CORS Handling - Allow All Origins for Local Development
+    Header set Access-Control-Allow-Origin "http://127.0.0.1:8000" env=ALLOW_CORS
+    Header set Access-Control-Allow-Origin "http://localhost:8000" env=ALLOW_CORS
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+
+    # Allow preflight request
+    <IfModule mod_headers.c>
+        Header set Access-Control-Allow-Origin "*"
+        Header set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+        Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+        Header set Access-Control-Allow-Credentials "true"
+    </IfModule>
 </IfModule>
+

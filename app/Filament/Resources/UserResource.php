@@ -25,7 +25,34 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->label('Name')
+                    ->maxLength(255),
+
+                Forms\Components\TextInput::make('email')
+                    ->email()
+                    ->required()
+                    ->unique(User::class, 'email', fn ($record) => $record)
+                    ->label('Email')
+                    ->maxLength(255),
+
+                Forms\Components\TextInput::make('password')
+                    ->password()
+                    ->required(fn ($livewire) => !$livewire->record) // Password is required only when creating a new user
+                    ->minLength(8)
+                    ->label('Password')
+                    ->maxLength(255)
+                    ->reactive()
+                    ->afterStateUpdated(fn ($state, $get) => $get('password') !== $state ? $state : null),
+
+                // Forms\Components\Checkbox::make('is_admin')
+                //     ->label('Is Admin')
+                //     ->default(false),
+
+                Forms\Components\DateTimePicker::make('email_verified_at')
+                    ->nullable()
+                    ->label('Email Verified At'),
             ]);
     }
 
@@ -40,10 +67,17 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('is_admin')->label('Admin'),
             ])
             ->filters([
-                //
+                // You can add filters, for example, for admin status
+                Tables\Filters\SelectFilter::make('is_admin')
+                    ->options([
+                        0 => 'User',
+                        1 => 'Admin',
+                    ]),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -65,6 +99,7 @@ class UserResource extends Resource
             'index' => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
+            'view' => Pages\ViewUser::route('/{record}'),
         ];
     }
 }
