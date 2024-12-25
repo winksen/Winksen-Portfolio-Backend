@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
-use App\Models\User;
+use App\Filament\Resources\IdentityResource\Pages;
+use App\Filament\Resources\IdentityResource\RelationManagers;
+use App\Models\Identity;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,13 +13,13 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class UserResource extends Resource
+class IdentityResource extends Resource
 {
-    protected static ?string $model = User::class;
+    protected static ?string $model = Identity::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static ?string $navigationIcon = 'heroicon-o-identification';
 
-    public static function getNavigationBadge(): ?string { return (string) User::count(); }
+    public static function getNavigationBadge(): ?string { return (string) Identity::count(); }
 
     public static function form(Form $form): Form
     {
@@ -33,11 +33,7 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->label('ID'),
-                Tables\Columns\TextColumn::make('name')->label('Name'),
-                Tables\Columns\TextColumn::make('created_at')->dateTime()->label('Created At'),
-                Tables\Columns\TextColumn::make('updated_at')->dateTime()->label('Updated At'),
-                Tables\Columns\TextColumn::make('is_admin')->label('Admin'),
+                //
             ])
             ->filters([
                 //
@@ -62,9 +58,9 @@ class UserResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
-            'create' => Pages\CreateUser::route('/create'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'index' => Pages\ListIdentities::route('/'),
+            'create' => Pages\CreateIdentity::route('/create'),
+            'edit' => Pages\EditIdentity::route('/{record}/edit'),
         ];
     }
 }
